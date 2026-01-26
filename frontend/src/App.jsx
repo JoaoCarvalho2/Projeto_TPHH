@@ -127,7 +127,7 @@ function App() {
                 <div className="absolute inset-0 rounded-2xl shadow-[inset_0_0_20px_rgba(220,38,38,0.2)] pointer-events-none"></div>
                 
                 <div className="absolute -top-4 bg-red-900 text-red-100 px-3 py-1 rounded border border-red-500 shadow-lg shadow-red-900/50 font-bold text-xs tracking-wider flex items-center gap-1">
-                  <span className="text-red-300">#2</span> GRANDMASTER
+                  <span className="text-red-300">#2</span>
                 </div>
 
                 <div className="relative mt-4">
@@ -198,7 +198,7 @@ function App() {
                 <div className="absolute inset-0 rounded-2xl shadow-[inset_0_0_20px_rgba(147,51,234,0.2)] pointer-events-none"></div>
 
                 <div className="absolute -top-4 bg-purple-900 text-purple-100 px-3 py-1 rounded border border-purple-500 shadow-lg shadow-purple-900/50 font-bold text-xs tracking-wider flex items-center gap-1">
-                  <span className="text-purple-300">#3</span> MASTER
+                  <span className="text-purple-300">#3</span>
                 </div>
 
                 <div className="relative mt-4">
