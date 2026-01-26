@@ -82,7 +82,7 @@ async def background_worker():
     while True:
         # Espera 30 minutos (1800 segundos)
         print("⏳ [Auto-Update] Aguardando 30 minutos para o próximo ciclo...")
-        await asyncio.sleep(1800)
+        await asyncio.sleep(900)
 
         print("🔄 [Auto-Update] Iniciando atualização geral...")
         db = SessionLocal()
