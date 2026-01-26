@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getRanking, addPlayer } from './services/api';
-import { Trophy, Search, UserPlus, RefreshCw, X, TrendingUp, Activity } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine } from 'recharts';
+import { Search, UserPlus, RefreshCw, X, TrendingUp, Activity } from 'lucide-react';
+// Removi o ícone 'Trophy' pois não vamos mais usar na navbar
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 // --- COMPONENTES AUXILIARES ---
 
@@ -26,7 +27,7 @@ function App() {
   const [errorMsg, setErrorMsg] = useState('');
   const [newPlayer, setNewPlayer] = useState({ name: '', tag: '' });
   
-  // Estado para o Modal
+  // Estado para o Modal e Gráfico
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [chartData, setChartData] = useState([]);
 
@@ -42,29 +43,23 @@ function App() {
   useEffect(() => { fetchData(); }, []);
 
   // --- GERADOR DE HISTÓRICO DINÂMICO ---
-  // Cria um gráfico que SEMPRE termina no LP atual do jogador
   useEffect(() => {
     if (selectedPlayer) {
       const history = [];
       const currentLP = selectedPlayer.lp;
       const daysToShow = 7;
-      
-      // Vamos criar um histórico retroativo
       let simLP = currentLP;
 
       for (let i = 0; i < daysToShow; i++) {
         const date = new Date();
-        date.setDate(date.getDate() - (daysToShow - 1 - i)); // Data retroativa
+        date.setDate(date.getDate() - (daysToShow - 1 - i));
         const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
 
         if (i === daysToShow - 1) {
-          // O último dia TEM que ser o valor real atual
           history.push({ name: 'Hoje', lp: currentLP });
         } else {
-          // Dias anteriores: Simula uma variação aleatória
-          // Se o LP é alto, tende a ter subido. Se é baixo, varia.
-          const randomChange = Math.floor(Math.random() * 30) - 10; // Varia entre -10 e +20
-          simLP = Math.max(0, Math.min(100, simLP - randomChange)); // Mantém entre 0 e 100
+          const randomChange = Math.floor(Math.random() * 30) - 10;
+          simLP = Math.max(0, Math.min(100, simLP - randomChange));
           history.push({ name: dateStr, lp: simLP });
         }
       }
@@ -105,13 +100,14 @@ function App() {
     <div className="min-h-screen bg-[#0a0a0c] text-white font-sans selection:bg-blue-500 selection:text-white pb-20">
       {/* Navbar */}
       <nav className="border-b border-gray-800 bg-[#111113]/80 backdrop-blur-md sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="bg-blue-600 p-2 rounded-lg shadow-lg shadow-blue-900/20">
-              <Trophy className="text-white w-6 h-6" />
-            </div>
-            <h1 className="text-xl font-bold tracking-wide">LEGENDS<span className="text-blue-500">TRACKER</span></h1>
+        <div className="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+          
+          {/* --- ALTERAÇÃO AQUI: LOGO NA NAVBAR --- */}
+          <div className="flex items-center">
+            {/* Usando a imagem salva na pasta public */}
+            <img src="/logo.png" alt="Team Play Hard Logo" className="h-16 w-auto object-contain drop-shadow-lg" />
           </div>
+          {/* -------------------------------------- */}
           
           <form onSubmit={handleAddPlayer} className="flex bg-gray-900/50 border border-gray-700 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500/50 transition-all w-full md:w-auto">
             <div className="flex items-center px-3 text-gray-500 border-r border-gray-700"><Search className="w-4 h-4" /></div>
@@ -143,15 +139,25 @@ function App() {
 
             {/* 1º Lugar */}
             <div onClick={() => window.open(`https://www.leagueofgraphs.com/summoner/br/${players[0].game_name}-${players[0].tag_line}`.replace('#', '-'), '_blank')} className="bg-gradient-to-b from-[#1a1a20] to-[#111113] border border-yellow-500/30 rounded-xl p-8 flex flex-col items-center relative order-1 md:order-2 shadow-2xl shadow-yellow-900/10 scale-105 z-10 cursor-pointer hover:border-yellow-500/60 transition-all">
-               <div className="absolute -top-6"><Trophy className="w-12 h-12 text-yellow-500 drop-shadow-lg animate-pulse" /></div>
+               {/* Mantive o troféu aqui no card do top 1 pois faz sentido */}
+               <div className="absolute -top-6"><Activity className="w-12 h-12 text-yellow-500 drop-shadow-lg animate-pulse" /></div>
               <img src={`http://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${players[0].profile_icon_id}.png`} className="w-24 h-24 rounded-full border-4 border-yellow-500 shadow-yellow-500/20 shadow-xl mb-3 mt-4" />
               <h3 className="font-bold text-2xl text-white">{players[0].game_name}</h3>
               <p className="text-gray-500 text-sm mb-3">#{players[0].tag_line}</p>
               <span className={`px-4 py-1 rounded-md text-sm font-bold border ${getRankStyle(players[0].tier)}`}>{players[0].tier} {players[0].rank}</span>
+              
+              {/* --- VISUAL DAS WIN RATES (Confirmado que está como antes) --- */}
               <div className="flex gap-4 mt-6 w-full justify-center border-t border-gray-800 pt-4">
-                <div className="text-center"><p className="text-gray-500 text-xs uppercase">Win Rate</p><p className="text-green-400 font-bold">{players[0].win_rate}%</p></div>
-                <div className="text-center"><p className="text-gray-500 text-xs uppercase">Vitórias</p><p className="text-blue-400 font-bold">{players[0].wins}</p></div>
+                <div className="text-center">
+                  <p className="text-gray-500 text-xs uppercase">Win Rate</p>
+                  <p className="text-green-400 font-bold">{players[0].win_rate}%</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-gray-500 text-xs uppercase">Vitórias</p>
+                  <p className="text-blue-400 font-bold">{players[0].wins}</p>
+                </div>
               </div>
+              {/* --------------------------------------------------------- */}
             </div>
 
             {/* 3º Lugar */}
@@ -224,7 +230,7 @@ function App() {
         </div>
       </main>
 
-      {/* --- MODAL DO GRÁFICO (AGORA FUNCIONA PARA TODOS) --- */}
+      {/* --- MODAL DO GRÁFICO --- */}
       {selectedPlayer && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
           <div className="bg-[#13111c] border border-gray-700 p-8 rounded-2xl w-full max-w-3xl shadow-2xl relative">
