@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getRanking, addPlayer } from './services/api';
 import { Search, UserPlus, RefreshCw, X, TrendingUp, Activity } from 'lucide-react';
-// Removi o ícone 'Trophy' pois não vamos mais usar na navbar
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
-// --- COMPONENTES AUXILIARES ---
-
-// Tooltip Personalizado (Caixinha roxa)
+// Tooltip do Gráfico
 const CustomTooltip = ({ active, payload, label, tier }) => {
   if (active && payload && payload.length) {
     return (
@@ -26,8 +23,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [newPlayer, setNewPlayer] = useState({ name: '', tag: '' });
-  
-  // Estado para o Modal e Gráfico
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [chartData, setChartData] = useState([]);
 
@@ -42,19 +37,17 @@ function App() {
 
   useEffect(() => { fetchData(); }, []);
 
-  // --- GERADOR DE HISTÓRICO DINÂMICO ---
+  // Simulação de Histórico
   useEffect(() => {
     if (selectedPlayer) {
       const history = [];
       const currentLP = selectedPlayer.lp;
       const daysToShow = 7;
       let simLP = currentLP;
-
       for (let i = 0; i < daysToShow; i++) {
         const date = new Date();
         date.setDate(date.getDate() - (daysToShow - 1 - i));
         const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
-
         if (i === daysToShow - 1) {
           history.push({ name: 'Hoje', lp: currentLP });
         } else {
@@ -97,24 +90,24 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0c] text-white font-sans selection:bg-blue-500 selection:text-white pb-20">
-      {/* Navbar */}
+    <div className="min-h-screen bg-[#0a0a0c] text-white font-sans pb-20">
+      
+      {/* --- NAVBAR: LOGO + TEXTO --- */}
       <nav className="border-b border-gray-800 bg-[#111113]/80 backdrop-blur-md sticky top-0 z-40">
         <div className="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
           
-          {/* --- ALTERAÇÃO AQUI: LOGO NA NAVBAR --- */}
-          <div className="flex items-center">
-            {/* Usando a imagem salva na pasta public */}
-            <img src="/logo.png" alt="Team Play Hard Logo" className="h-16 w-auto object-contain drop-shadow-lg" />
+          <div className="flex items-center gap-3">
+            {/* Logo da Pasta Public */}
+            <img src="/logo.png" alt="TPHH Logo" className="h-12 w-auto object-contain drop-shadow-lg" />
+            <h1 className="text-xl font-bold tracking-wide">TPHH<span className="text-orange-500">TRACKER</span></h1>
           </div>
-          {/* -------------------------------------- */}
           
-          <form onSubmit={handleAddPlayer} className="flex bg-gray-900/50 border border-gray-700 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500/50 transition-all w-full md:w-auto">
+          <form onSubmit={handleAddPlayer} className="flex bg-gray-900/50 border border-gray-700 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-orange-500/50 transition-all w-full md:w-auto">
             <div className="flex items-center px-3 text-gray-500 border-r border-gray-700"><Search className="w-4 h-4" /></div>
-            <input type="text" placeholder="Nome (ex: Faker)" className="bg-transparent px-3 py-2 outline-none text-sm w-full md:w-40" value={newPlayer.name} onChange={e => setNewPlayer({...newPlayer, name: e.target.value})}/>
+            <input type="text" placeholder="Nome" className="bg-transparent px-3 py-2 outline-none text-sm w-full md:w-40" value={newPlayer.name} onChange={e => setNewPlayer({...newPlayer, name: e.target.value})}/>
             <div className="flex items-center px-2 text-gray-600 bg-gray-800 border-l border-r border-gray-700 text-sm font-mono">#</div>
             <input type="text" placeholder="TAG" className="bg-transparent px-3 py-2 outline-none text-sm w-20" value={newPlayer.tag} onChange={e => setNewPlayer({...newPlayer, tag: e.target.value})}/>
-            <button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 px-4 py-2 font-medium transition-colors">
+            <button type="submit" disabled={loading} className="bg-orange-600 hover:bg-orange-700 px-4 py-2 font-medium transition-colors">
               {loading ? <RefreshCw className="animate-spin w-4 h-4"/> : <UserPlus className="w-4 h-4"/>}
             </button>
           </form>
@@ -122,8 +115,7 @@ function App() {
       </nav>
 
       <main className="container mx-auto px-4 py-8">
-        
-        {/* --- TOP 3 DESTAQUES --- */}
+        {/* DESTAQUES TOP 3 */}
         {players.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 mt-4 items-end">
              {/* 2º Lugar */}
@@ -134,30 +126,21 @@ function App() {
                 <h3 className="font-bold text-lg">{players[1].game_name}</h3>
                 <span className={`px-3 py-0.5 rounded text-xs font-bold border mt-2 ${getRankStyle(players[1].tier)}`}>{players[1].tier} {players[1].rank}</span>
                 <p className="text-gray-400 text-sm mt-1">{players[1].lp} LP</p>
+                <p className="text-green-400 text-xs font-bold mt-2">{players[1].win_rate}% WR</p>
               </div>
             )}
 
             {/* 1º Lugar */}
-            <div onClick={() => window.open(`https://www.leagueofgraphs.com/summoner/br/${players[0].game_name}-${players[0].tag_line}`.replace('#', '-'), '_blank')} className="bg-gradient-to-b from-[#1a1a20] to-[#111113] border border-yellow-500/30 rounded-xl p-8 flex flex-col items-center relative order-1 md:order-2 shadow-2xl shadow-yellow-900/10 scale-105 z-10 cursor-pointer hover:border-yellow-500/60 transition-all">
-               {/* Mantive o troféu aqui no card do top 1 pois faz sentido */}
-               <div className="absolute -top-6"><Activity className="w-12 h-12 text-yellow-500 drop-shadow-lg animate-pulse" /></div>
-              <img src={`http://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${players[0].profile_icon_id}.png`} className="w-24 h-24 rounded-full border-4 border-yellow-500 shadow-yellow-500/20 shadow-xl mb-3 mt-4" />
+            <div onClick={() => window.open(`https://www.leagueofgraphs.com/summoner/br/${players[0].game_name}-${players[0].tag_line}`.replace('#', '-'), '_blank')} className="bg-gradient-to-b from-[#1a1a20] to-[#111113] border border-orange-500/30 rounded-xl p-8 flex flex-col items-center relative order-1 md:order-2 shadow-2xl shadow-orange-900/10 scale-105 z-10 cursor-pointer hover:border-orange-500/60 transition-all">
+               <div className="absolute -top-6"><Activity className="w-12 h-12 text-orange-500 drop-shadow-lg animate-pulse" /></div>
+              <img src={`http://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${players[0].profile_icon_id}.png`} className="w-24 h-24 rounded-full border-4 border-orange-500 shadow-orange-500/20 shadow-xl mb-3 mt-4" />
               <h3 className="font-bold text-2xl text-white">{players[0].game_name}</h3>
               <p className="text-gray-500 text-sm mb-3">#{players[0].tag_line}</p>
               <span className={`px-4 py-1 rounded-md text-sm font-bold border ${getRankStyle(players[0].tier)}`}>{players[0].tier} {players[0].rank}</span>
-              
-              {/* --- VISUAL DAS WIN RATES (Confirmado que está como antes) --- */}
               <div className="flex gap-4 mt-6 w-full justify-center border-t border-gray-800 pt-4">
-                <div className="text-center">
-                  <p className="text-gray-500 text-xs uppercase">Win Rate</p>
-                  <p className="text-green-400 font-bold">{players[0].win_rate}%</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-gray-500 text-xs uppercase">Vitórias</p>
-                  <p className="text-blue-400 font-bold">{players[0].wins}</p>
-                </div>
+                <div className="text-center"><p className="text-gray-500 text-xs uppercase">Win Rate</p><p className="text-green-400 font-bold">{players[0].win_rate}%</p></div>
+                <div className="text-center"><p className="text-gray-500 text-xs uppercase">Vitórias</p><p className="text-blue-400 font-bold">{players[0].wins}</p></div>
               </div>
-              {/* --------------------------------------------------------- */}
             </div>
 
             {/* 3º Lugar */}
@@ -168,15 +151,16 @@ function App() {
                 <h3 className="font-bold text-lg">{players[2].game_name}</h3>
                 <span className={`px-3 py-0.5 rounded text-xs font-bold border mt-2 ${getRankStyle(players[2].tier)}`}>{players[2].tier} {players[2].rank}</span>
                 <p className="text-gray-400 text-sm mt-1">{players[2].lp} LP</p>
+                <p className="text-green-400 text-xs font-bold mt-2">{players[2].win_rate}% WR</p>
               </div>
             )}
           </div>
         )}
 
-        {/* --- TABELA --- */}
+        {/* --- TABELA DE RANKING --- */}
         <div className="bg-[#111113] rounded-xl border border-gray-800 overflow-hidden shadow-xl">
           <div className="p-4 border-b border-gray-800 flex items-center gap-2">
-            <Activity className="w-5 h-5 text-blue-500" />
+            <Activity className="w-5 h-5 text-orange-500" />
             <h2 className="font-bold">Ranking Completo</h2>
           </div>
           <table className="w-full text-left">
@@ -187,6 +171,8 @@ function App() {
                 <th className="p-4">Elo</th>
                 <th className="p-4">Melhores Champs</th>
                 <th className="p-4 text-center">Evolução</th>
+                {/* COLUNA WIN RATE ADICIONADA AQUI */}
+                <th className="p-4 text-center">Win Rate</th>
                 <th className="p-4 text-right">Vitórias</th>
               </tr>
             </thead>
@@ -196,9 +182,9 @@ function App() {
                   <td className="p-4 text-gray-500 font-mono text-sm">{index + 1}</td>
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <img src={`http://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${p.profile_icon_id}.png`} className="w-10 h-10 rounded-full border border-gray-700 group-hover:border-blue-500 transition-colors" />
+                      <img src={`http://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${p.profile_icon_id}.png`} className="w-10 h-10 rounded-full border border-gray-700 group-hover:border-orange-500 transition-colors" />
                       <div>
-                        <p className="font-bold text-gray-200 group-hover:text-blue-400 transition-colors">{p.game_name}</p>
+                        <p className="font-bold text-gray-200 group-hover:text-orange-400 transition-colors">{p.game_name}</p>
                         <p className="text-xs text-gray-600">#{p.tag_line}</p>
                       </div>
                     </div>
@@ -209,7 +195,8 @@ function App() {
                   </td>
                   <td className="p-4">
                     <div className="flex -space-x-2">
-                      {p.top_champions && p.top_champions.map((champId) => (
+                      {/* Mostra ícones apenas se top_champions for uma lista válida */}
+                      {p.top_champions && Array.isArray(p.top_champions) && p.top_champions.map((champId) => (
                         <img key={champId} src={`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${champId}.png`} className="w-8 h-8 rounded-full border-2 border-[#111113] bg-gray-800 hover:scale-110 transition-transform z-0 hover:z-10" title={`Champ ID: ${champId}`} />
                       ))}
                     </div>
@@ -217,12 +204,28 @@ function App() {
                   <td className="p-4 text-center" onClick={(e) => e.stopPropagation()}>
                     <div className="flex flex-col items-center gap-1">
                        <span className="text-green-400 font-bold text-xs">+ {p.lp} LP</span>
-                       <button onClick={(e) => { e.stopPropagation(); setSelectedPlayer(p); }} className="text-gray-500 hover:text-blue-400 transition p-1 hover:bg-gray-700 rounded">
+                       <button onClick={(e) => { e.stopPropagation(); setSelectedPlayer(p); }} className="text-gray-500 hover:text-orange-400 transition p-1 hover:bg-gray-700 rounded">
                          <TrendingUp className="w-4 h-4" />
                        </button>
                     </div>
                   </td>
-                  <td className="p-4 text-right text-sm text-gray-500"><span className="text-blue-400">{p.wins}W</span> / <span className="text-red-400">{p.losses}L</span></td>
+                  
+                  {/* --- NOVA CÉLULA DE WIN RATE --- */}
+                  <td className="p-4 text-center">
+                    <div className="flex flex-col items-center">
+                      <span className={`text-sm font-bold ${p.win_rate >= 50 ? 'text-green-400' : 'text-red-400'}`}>
+                        {p.win_rate}%
+                      </span>
+                      {/* Barra de progresso visual */}
+                      <div className="w-12 h-1 bg-gray-800 rounded-full mt-1 overflow-hidden">
+                        <div className={`h-full ${p.win_rate >= 50 ? 'bg-green-500' : 'bg-red-500'}`} style={{ width: `${p.win_rate}%` }}></div>
+                      </div>
+                    </div>
+                  </td>
+                  
+                  <td className="p-4 text-right text-sm text-gray-500">
+                    <span className="text-blue-400">{p.wins}W</span> / <span className="text-red-400">{p.losses}L</span>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -230,11 +233,10 @@ function App() {
         </div>
       </main>
 
-      {/* --- MODAL DO GRÁFICO --- */}
+      {/* MODAL (O código do modal continua igual) */}
       {selectedPlayer && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
           <div className="bg-[#13111c] border border-gray-700 p-8 rounded-2xl w-full max-w-3xl shadow-2xl relative">
-            
             <div className="flex justify-between items-start mb-8">
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
@@ -248,22 +250,15 @@ function App() {
               </div>
               <button onClick={() => setSelectedPlayer(null)} className="p-2 hover:bg-gray-800 rounded-full transition-colors"><X className="w-6 h-6 text-gray-400" /></button>
             </div>
-
             <h3 className="text-gray-300 font-semibold mb-4">Evolução de Elo (Simulada)</h3>
-            
             <div className="h-80 w-full bg-[#181621] rounded-xl p-4 border border-gray-800 relative">
-              <div className="absolute inset-0 pointer-events-none opacity-20 z-0">
-                  <div className="w-full border-t border-dashed border-gray-400 mt-20"></div>
-                  <div className="w-full border-t border-dashed border-gray-400 mt-48"></div>
-              </div>
-
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 20, right: 20, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#2d2b3b" vertical={false} />
                   <XAxis dataKey="name" stroke="#6b7280" fontSize={12} tickLine={false} axisLine={false} tick={{ fill: '#6b7280' }} dy={10} />
                   <YAxis stroke="#6b7280" domain={[0, 100]} fontSize={12} tickLine={false} axisLine={false} tick={{ fill: '#6b7280' }} />
                   <Tooltip content={<CustomTooltip tier={selectedPlayer.tier} />} cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 2 }} />
-                  <Line type="monotone" dataKey="lp" stroke="#3b82f6" strokeWidth={3} dot={{ fill: '#34d399', r: 5, strokeWidth: 0 }} activeDot={{ r: 8, fill: '#fff', stroke: '#3b82f6', strokeWidth: 2 }} animationDuration={1000} />
+                  <Line type="monotone" dataKey="lp" stroke="#f97316" strokeWidth={3} dot={{ fill: '#fb923c', r: 5, strokeWidth: 0 }} activeDot={{ r: 8, fill: '#fff', stroke: '#f97316', strokeWidth: 2 }} animationDuration={1000} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
