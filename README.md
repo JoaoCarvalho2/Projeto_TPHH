@@ -1,4 +1,4 @@
-# 🏆 TPHH Tracker - League of Legends Leaderboard
+<img width="1773" height="582" alt="tph" src="https://github.com/user-attachments/assets/0b44a847-12da-4fcc-856c-ee571d02da1a" /># 🏆 TPHH Tracker - League of Legends Leaderboard
 
 ![Project Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -9,7 +9,10 @@ Um dashboard de ranking personalizado para League of Legends, focado em monitora
 
 ## 📸 Screenshots
 
-*(Você pode adicionar prints do seu projeto aqui depois)*
+<img width="1773" height="582" alt="tph" src="https://github.com/user-attachments/assets/98c79bfe-8d52-4095-9b83-50d8420ec1e0" />
+
+<img width="1550" height="664" alt="image" src="https://github.com/user-attachments/assets/ac41122f-20c7-497e-b4b3-af2d4af9a34d" />
+
 
 ---
 
