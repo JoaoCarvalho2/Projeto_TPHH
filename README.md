@@ -1,4 +1,4 @@
-<img width="1773" height="582" alt="tph" src="https://github.com/user-attachments/assets/0b44a847-12da-4fcc-856c-ee571d02da1a" /># 🏆 TPHH Tracker - League of Legends Leaderboard
+# 🏆 TPHH Tracker - League of Legends Leaderboard
 
 ![Project Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
