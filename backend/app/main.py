@@ -49,7 +49,9 @@ INITIAL_PLAYERS = [
     {"name": "Naju", "tag": "Anaju"},
     {"name": "u fear cold mind", "tag": "5145"},
     {"name": "Forrest Gump", "tag": "BG62"},
-    {"name": "Rammus blindado", "tag": "RMS"}
+    {"name": "Rammus blindado", "tag": "RMS"},
+    {"name": "Maid Mi", "tag": "mimi"},
+    {"name": "Hyorinmaru", "tag": "2878"}
 ]
 
 # --- 2. SISTEMA UNIFICADO DE BACKGROUND ---
