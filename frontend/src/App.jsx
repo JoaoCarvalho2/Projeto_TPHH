@@ -132,7 +132,7 @@ function App() {
 
                 <div className="relative mt-4">
                   <div className="absolute inset-0 bg-red-500 blur-xl opacity-20 rounded-full"></div>
-                  <img src={`http://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${players[1].profile_icon_id}.png`} className="w-20 h-20 rounded-full border-[3px] border-red-500 shadow-2xl relative z-10 group-hover:scale-105 transition-transform" />
+                  <img src={`http://ddragon.leagueoflegends.com/cdn/16.1.3/img/profileicon/${players[1].profile_icon_id}.png`} className="w-20 h-20 rounded-full border-[3px] border-red-500 shadow-2xl relative z-10 group-hover:scale-105 transition-transform" />
                 </div>
                 
                 <h3 className="font-bold text-lg mt-4 text-red-100">{players[1].game_name}</h3>
@@ -164,7 +164,7 @@ function App() {
 
               <div className="relative mt-6">
                 <div className="absolute inset-0 bg-yellow-400 blur-2xl opacity-30 rounded-full animate-pulse"></div>
-                <img src={`http://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${players[0].profile_icon_id}.png`} className="w-28 h-28 rounded-full border-4 border-yellow-400 shadow-2xl relative z-10" />
+                <img src={`http://ddragon.leagueoflegends.com/cdn/16.3.1/img/profileicon/${players[0].profile_icon_id}.png`} className="w-28 h-28 rounded-full border-4 border-yellow-400 shadow-2xl relative z-10" />
                 <div className="absolute -bottom-2 -right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded border border-blue-400 shadow-lg">#1</div>
               </div>
 
@@ -252,7 +252,7 @@ function App() {
                   <td className="p-4">
                     <div className="flex items-center gap-4">
                       <div className="relative">
-                        <img src={`http://ddragon.leagueoflegends.com/cdn/14.1.1/img/profileicon/${p.profile_icon_id}.png`} className="w-10 h-10 rounded-full border border-gray-700 group-hover:border-orange-500 transition-colors" />
+                        <img src={`http://ddragon.leagueoflegends.com/cdn/16.3.1/img/profileicon/${p.profile_icon_id}.png`} className="w-10 h-10 rounded-full border border-gray-700 group-hover:border-orange-500 transition-colors" />
                         {index < 3 && <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold border border-black ${index === 0 ? 'bg-yellow-500 text-black' : index === 1 ? 'bg-red-500 text-white' : 'bg-purple-500 text-white'}`}>{index + 1}</div>}
                       </div>
                       <div>
