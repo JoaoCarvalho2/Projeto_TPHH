@@ -132,7 +132,7 @@ function App() {
 
                 <div className="relative mt-4">
                   <div className="absolute inset-0 bg-red-500 blur-xl opacity-20 rounded-full"></div>
-                  <img src={`http://ddragon.leagueoflegends.com/cdn/16.1.3/img/profileicon/${players[1].profile_icon_id}.png`} className="w-20 h-20 rounded-full border-[3px] border-red-500 shadow-2xl relative z-10 group-hover:scale-105 transition-transform" />
+                  <img src={`http://ddragon.leagueoflegends.com/cdn/16.3.1/img/profileicon/${players[1].profile_icon_id}.png`} className="w-20 h-20 rounded-full border-[3px] border-red-500 shadow-2xl relative z-10 group-hover:scale-105 transition-transform" />
                 </div>
                 
                 <h3 className="font-bold text-lg mt-4 text-red-100">{players[1].game_name}</h3>
